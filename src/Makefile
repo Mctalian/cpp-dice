@@ -31,13 +31,16 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 # created to the list.
 TESTS = all_tests \
         die_test \
-		IHistorical_test \
+        CircularLinkedList_test \
+        IHistorical_test \
         INameable_test \
         IRollable_test \
         IWeightable_test \
         WeightableAndRollable_test
 
 IFACE_HEADERS = $(USER_DIR)/Interfaces/*.hpp
+
+STRUCT_HEADERS = $(USER_DIR)/Structs/*.hpp
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -99,6 +102,13 @@ die_test.o : $(USER_DIR)/Die/die_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
 
 die_test : die.o INameable.o IRollable.o IWeightable.o die_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+CircularLinkedList_test.o : $(USER_DIR)/Structs/CircularLinkedList_test.cpp $(STRUCT_HEADERS) $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Structs/CircularLinkedList_test.cpp
+
+CircularLinkedList_test : CircularLinkedList_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
 
 IHistorical.o : $(USER_DIR)/Interfaces/IHistorical.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IHistorical.cpp
