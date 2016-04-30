@@ -1,3 +1,6 @@
+#ifndef IHISTORICAL_HPP
+#define IHISTORICAL_HPP
+
 #include "../Die/die_consts.hpp"
 #include "IPrintable.hpp"
 
@@ -15,3 +18,5 @@ private:
     int trackRolls[NUM_SIDES];
     int lastRoll;
 };
+
+#endif

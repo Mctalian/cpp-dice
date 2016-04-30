@@ -1,3 +1,6 @@
+#ifndef INAMEABLE_HPP
+#define INAMEABLE_HPP
+
 #include <string>
 
 class INameable {
@@ -10,3 +13,5 @@ public:
 private:
     std::string name;
 };
+
+#endif
