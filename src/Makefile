@@ -31,6 +31,7 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 # created to the list.
 TESTS = all_tests \
         die_test \
+		IHistorical_test \
         INameable_test \
         IRollable_test \
         IWeightable_test
@@ -98,6 +99,15 @@ die_test.o : $(USER_DIR)/Die/die_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
 die_test : die.o INameable.o IRollable.o IWeightable.o die_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
+IHistorical.o : $(USER_DIR)/Interfaces/IHistorical.cpp $(IFACE_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IHistorical.cpp
+
+IHistorical_test.o : $(USER_DIR)/Interfaces/IHistorical_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IHistorical_test.cpp
+
+IHistorical_test : IHistorical.o IHistorical_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
 INameable.o : $(USER_DIR)/Interfaces/INameable.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/INameable.cpp
 
@@ -125,5 +135,5 @@ IWeightable_test.o : $(USER_DIR)/Interfaces/IWeightable_test.cpp $(IFACE_HEADERS
 IWeightable_test : IWeightable.o IWeightable_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
-all_tests: die.o INameable.o IRollable.o IWeightable.o die_test.o INameable_test.o IRollable_test.o IWeightable_test.o gtest_main.a
+all_tests: die.o IHistorical.o INameable.o IRollable.o IWeightable.o die_test.o IHistorical_test.o INameable_test.o IRollable_test.o IWeightable_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
