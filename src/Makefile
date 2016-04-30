@@ -30,7 +30,10 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
 TESTS = die_test \
-        IRollable_test
+        IRollable_test \
+        IWeightable_test
+
+IFACE_HEADERS = $(USER_DIR)/Interfaces/*.hpp
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -84,31 +87,28 @@ main:  main.o
 main.o:  main.cpp die.o IRollable.o IWeightable.o
 	$(CC) $(CFLAGS) -c main.cpp die.o
 
-die.o: $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp
+die.o: $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die.cpp
 
-die_test.o : $(USER_DIR)/Die/die_test.cpp \
-                     $(USER_DIR)/Die/die.hpp $(GTEST_HEADERS)
+die_test.o : $(USER_DIR)/Die/die_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die_test.cpp
 
 die_test : die.o IRollable.o IWeightable.o die_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
-IRollable.o: $(USER_DIR)/Interfaces/IRollable.cpp $(USER_DIR)/Interfaces/IRollable.hpp
+IRollable.o: $(USER_DIR)/Interfaces/IRollable.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IRollable.cpp
 
-IRollable_test.o : $(USER_DIR)/Interfaces/IRollable_test.cpp \
-                     $(USER_DIR)/Interfaces/IRollable.hpp $(GTEST_HEADERS)
+IRollable_test.o : $(USER_DIR)/Interfaces/IRollable_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IRollable_test.cpp
 
 IRollable_test : IRollable.o IRollable_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
-IWeightable.o: $(USER_DIR)/Interfaces/IWeightable.cpp $(USER_DIR)/Interfaces/IWeightable.hpp
+IWeightable.o: $(USER_DIR)/Interfaces/IWeightable.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IWeightable.cpp
 
-IWeightable_test.o : $(USER_DIR)/Interfaces/IWeightable_test.cpp \
-                     $(USER_DIR)/Interfaces/IWeightable.hpp $(GTEST_HEADERS)
+IWeightable_test.o : $(USER_DIR)/Interfaces/IWeightable_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IWeightable_test.cpp
 
 IWeightable_test : IWeightable.o IWeightable_test.o gtest_main.a

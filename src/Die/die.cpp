@@ -1,34 +1,35 @@
 #include <cstdlib>
 #include "die.hpp"
 
-Die::Die() {
-    name = "";
-    loadedSide = 1;
-    loadAmount = 1;
+Die::Die() :
+    name(""),
+    lastRoll(0)
+{
+    setLoadedSide(1);
+    setLoadAmount(1);
 }
 
-Die::Die(std::string name, int side, int amount) {
-    name = name;
-    loadedSide = side;
-    loadAmount = amount;
+Die::Die(std::string name, int side, int amount) :
+    name(name),
+    lastRoll(0)
+{
+    setLoadedSide(side);
+    setLoadAmount(amount);
 }
 
 std::string Die::getName() {
     return name;
 }
 
-int Die::getLoadedSide() {
-    return loadedSide;
-}
-
-int Die::getLoadAmount() {
-    return loadAmount;
+void Die::Print() {
+    printf("%s: %d\n", name.c_str(), lastRoll);
 }
 
 int Die::Roll() {
-    int rollVal = roll(NUM_SIDES + loadAmount - 1);
+    int rollVal = roll(NUM_SIDES + getLoadAmount() - 1);
     if (rollVal > 6) {
-        rollVal = loadedSide;
+        rollVal = getLoadedSide();
     }
+    lastRoll = rollVal;
     return rollVal;
 }
