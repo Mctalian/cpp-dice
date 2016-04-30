@@ -1,28 +1,21 @@
-#include <cstdlib>
 #include "die.hpp"
 
 Die::Die() :
-    name(""),
+    INameable(""),
+    IWeightable(1,1),
     lastRoll(0)
 {
-    setLoadedSide(1);
-    setLoadAmount(1);
 }
 
 Die::Die(std::string name, int side, int amount) :
-    name(name),
+    INameable(name),
+    IWeightable(amount, side),
     lastRoll(0)
 {
-    setLoadedSide(side);
-    setLoadAmount(amount);
-}
-
-std::string Die::getName() {
-    return name;
 }
 
 void Die::Print() {
-    printf("%s: %d\n", name.c_str(), lastRoll);
+    printf("%s: %d\n", getName().c_str(), lastRoll);
 }
 
 int Die::Roll() {

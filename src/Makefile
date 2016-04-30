@@ -29,7 +29,9 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = die_test \
+TESTS = all_tests \
+        die_test \
+        INameable_test \
         IRollable_test \
         IWeightable_test
 
@@ -84,16 +86,25 @@ main:  main.o
 # To create the object file main.o, we need the source
 # files main.cpp:
 #
-main.o:  main.cpp die.o IRollable.o IWeightable.o
+main.o :  main.cpp die.o IRollable.o IWeightable.o
 	$(CC) $(CFLAGS) -c main.cpp die.o
 
-die.o: $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp $(IFACE_HEADERS)
+die.o : $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die.cpp
 
 die_test.o : $(USER_DIR)/Die/die_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die_test.cpp
 
-die_test : die.o IRollable.o IWeightable.o die_test.o gtest_main.a
+die_test : die.o INameable.o IRollable.o IWeightable.o die_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+INameable.o : $(USER_DIR)/Interfaces/INameable.cpp $(IFACE_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/INameable.cpp
+
+INameable_test.o : $(USER_DIR)/Interfaces/INameable_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/INameable_test.cpp
+
+INameable_test : INameable.o INameable_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 IRollable.o: $(USER_DIR)/Interfaces/IRollable.cpp $(IFACE_HEADERS)
@@ -114,5 +125,5 @@ IWeightable_test.o : $(USER_DIR)/Interfaces/IWeightable_test.cpp $(IFACE_HEADERS
 IWeightable_test : IWeightable.o IWeightable_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
-clean:
-	$(RM) main *.o *.a *~
+all_tests: die.o INameable.o IRollable.o IWeightable.o die_test.o INameable_test.o IRollable_test.o IWeightable_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
