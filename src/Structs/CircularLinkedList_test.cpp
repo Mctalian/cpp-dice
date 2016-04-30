@@ -1,7 +1,7 @@
 #include "CircularLinkedList.hpp"
 #include "gtest/gtest.h"
 
-// Then we define a test fixture class template.
+// Define a test fixture class template.
 template <class T>
 class CircularLinkedListTest : public testing::Test {
 protected:
@@ -11,13 +11,6 @@ protected:
 
     virtual ~CircularLinkedListTest<T>() { delete cll; }
 
-    // Note that we test an implementation via the base interface
-    // instead of the actual implementation class.  This is important
-    // for keeping the tests close to the real world scenario, where the
-    // implementation is invoked via the base interface.  It avoids
-    // got-yas where the implementation class has a method that shadows
-    // a method with the same name (but slightly different argument
-    // types) in the base interface, for example.
     CircularLinkedList<T>* const cll;
 };
 
