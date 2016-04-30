@@ -2,20 +2,12 @@
 
 Die::Die() :
     INameable(""),
-    IWeightable(1,1)
+    WeightableAndRollable(1,1)
 {
 }
 
-Die::Die(std::string name, int side, int amount) :
+Die::Die(std::string name, int amount, int side) :
     INameable(name),
-    IWeightable(amount, side)
+    WeightableAndRollable(amount, side)
 {
-}
-
-int Die::Roll() {
-    int rollVal = roll(NUM_SIDES + getLoadAmount() - 1);
-    if (rollVal > 6) {
-        rollVal = getLoadedSide();
-    }
-    return rollVal;
 }
