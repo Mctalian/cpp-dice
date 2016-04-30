@@ -5,40 +5,53 @@
 
 // Should initialize unweighted
 TEST(IWeightableTest, Unweighted) {
-    IWeightable w1;
+    IWeightable w;
     int amnt;
     int side;
 
-    amnt = w1.getLoadAmount();
+    amnt = w.getLoadAmount();
     ASSERT_EQ(amnt, 1);
 
-    side = w1.getLoadedSide();
+    side = w.getLoadedSide();
     ASSERT_EQ(side, 1);
+}
+
+// Should initialize Weighted
+TEST(IWeightableTest, Weighted) {
+    IWeightable w(2, 6);
+    int amnt;
+    int side;
+
+    amnt = w.getLoadAmount();
+    ASSERT_EQ(amnt, 2);
+
+    side = w.getLoadedSide();
+    ASSERT_EQ(side, 6);
 }
 
 // Should disallow invalid weights
 TEST(IWeightableTest, InvalidWeight) {
-    IWeightable w2;
+    IWeightable w;
     int amnt;
 
-    w2.setLoadAmount(0);
-    amnt = w2.getLoadAmount();
+    w.setLoadAmount(0);
+    amnt = w.getLoadAmount();
     ASSERT_NE(amnt, 0);
     ASSERT_EQ(amnt, 1);
 }
 
 // Should disallow invalid sides
 TEST(IWeightableTest, InvalidSide) {
-    IWeightable w3;
+    IWeightable w;
     int side;
 
-    w3.setLoadedSide(0);
-    side = w3.getLoadedSide();
+    w.setLoadedSide(0);
+    side = w.getLoadedSide();
     ASSERT_NE(side, 0);
     ASSERT_EQ(side, 1);
 
-    w3.setLoadedSide(7);
-    side = w3.getLoadedSide();
+    w.setLoadedSide(7);
+    side = w.getLoadedSide();
     ASSERT_NE(side, 7);
     ASSERT_EQ(side, 1);
 }

@@ -5,6 +5,11 @@ IWeightable::IWeightable() {
     setLoadedSide(1);
 }
 
+IWeightable::IWeightable(int amnt, int side) {
+    setLoadAmount(amnt);
+    setLoadedSide(side);
+}
+
 void IWeightable::setLoadAmount(int amnt) {
     if (amnt > 0) {
         loadAmount = amnt;
