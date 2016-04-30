@@ -2,20 +2,14 @@
 
 Die::Die() :
     INameable(""),
-    IWeightable(1,1),
-    lastRoll(0)
+    IWeightable(1,1)
 {
 }
 
 Die::Die(std::string name, int side, int amount) :
     INameable(name),
-    IWeightable(amount, side),
-    lastRoll(0)
+    IWeightable(amount, side)
 {
-}
-
-void Die::Print() {
-    printf("%s: %d\n", getName().c_str(), lastRoll);
 }
 
 int Die::Roll() {
@@ -23,6 +17,5 @@ int Die::Roll() {
     if (rollVal > 6) {
         rollVal = getLoadedSide();
     }
-    lastRoll = rollVal;
     return rollVal;
 }
