@@ -81,17 +81,17 @@ main:  main.o
 # To create the object file main.o, we need the source
 # files main.cpp:
 #
-main.o:  main.cpp die.o
+main.o:  main.cpp die.o IRollable.o IWeightable.o
 	$(CC) $(CFLAGS) -c main.cpp die.o
 
-die.o: $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp IRollable.o
+die.o: $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die.cpp
 
 die_test.o : $(USER_DIR)/Die/die_test.cpp \
                      $(USER_DIR)/Die/die.hpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die_test.cpp
 
-die_test : die.o IRollable.o die_test.o gtest_main.a
+die_test : die.o IRollable.o IWeightable.o die_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 IRollable.o: $(USER_DIR)/Interfaces/IRollable.cpp $(USER_DIR)/Interfaces/IRollable.hpp
@@ -102,6 +102,16 @@ IRollable_test.o : $(USER_DIR)/Interfaces/IRollable_test.cpp \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IRollable_test.cpp
 
 IRollable_test : IRollable.o IRollable_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+IWeightable.o: $(USER_DIR)/Interfaces/IWeightable.cpp $(USER_DIR)/Interfaces/IWeightable.hpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IWeightable.cpp
+
+IWeightable_test.o : $(USER_DIR)/Interfaces/IWeightable_test.cpp \
+                     $(USER_DIR)/Interfaces/IWeightable.hpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IWeightable_test.cpp
+
+IWeightable_test : IWeightable.o IWeightable_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 clean:
