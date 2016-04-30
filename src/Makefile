@@ -29,7 +29,8 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = die_unittest
+TESTS = die_test \
+        IRollable_test
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -83,14 +84,24 @@ main:  main.o
 main.o:  main.cpp die.o
 	$(CC) $(CFLAGS) -c main.cpp die.o
 
-die.o: $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp
+die.o: $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp IRollable.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die.cpp
 
 die_test.o : $(USER_DIR)/Die/die_test.cpp \
                      $(USER_DIR)/Die/die.hpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die_test.cpp
 
-die_test : die.o die_test.o gtest_main.a
+die_test : die.o IRollable.o die_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+IRollable.o: $(USER_DIR)/Interfaces/IRollable.cpp $(USER_DIR)/Interfaces/IRollable.hpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IRollable.cpp
+
+IRollable_test.o : $(USER_DIR)/Interfaces/IRollable_test.cpp \
+                     $(USER_DIR)/Interfaces/IRollable.hpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IRollable_test.cpp
+
+IRollable_test : IRollable.o IRollable_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 clean:

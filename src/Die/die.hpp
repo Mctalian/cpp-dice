@@ -1,7 +1,10 @@
 #include <string>
+#include "../Interfaces/IRollable.hpp"
 
-class Die {
+class Die : IRollable {
 public:
+    static const int NUM_SIDES = 6;
+
     Die();
     Die(std::string n, int side=1, int amount=1);
 
@@ -9,10 +12,9 @@ public:
     int getLoadedSide();
     int getLoadAmount();
 
-    int roll();
+    int Roll();
 
 private:
-    static const int NUM_SIDES = 6;
     std::string name;
     int loadedSide;
     int loadAmount;

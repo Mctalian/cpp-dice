@@ -21,7 +21,7 @@ TEST(DieTest, Weighted) {
 // Tests rolling a die
 TEST(DieTest, Roll) {
     Die d2("TestDie2");
-    int val = d2.roll();
+    int val = d2.Roll();
     ASSERT_LT(0, val); // "0 is less than val"
     ASSERT_GE(6, val); // "6 is greater than or equal to val"
 }
@@ -29,8 +29,8 @@ TEST(DieTest, Roll) {
 // Tests rolling a weighted die
 TEST(DieTest, RollWeighted) {
     Die d3("TestDie3", 3, 1000000000);
-    int val = d3.roll();
+    int val = d3.Roll();
     EXPECT_EQ(3, val);
-    val = d3.roll();
+    val = d3.Roll();
     EXPECT_EQ(3, val);
 }
