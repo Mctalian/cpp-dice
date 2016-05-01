@@ -33,7 +33,8 @@ int Sequencer::getNumToThrow() {
 }
 
 void Sequencer::addDie(std::string name, int amount, int side) {
-    dieCLL.append(Die(name, amount, side));
+    Die d(name, amount, side);
+    dieCLL.append(d);
 }
 
 int Sequencer::getNumDie() {
@@ -41,25 +42,36 @@ int Sequencer::getNumDie() {
 }
 
 void Sequencer::execute() {
-    for (currentThrow = 1; currentThrow < numToThrow; currentThrow++) {
+    // Execute Each Throw and Print Status
+    for (int t = 1; t <= numToThrow; t++) {
+        currentThrow = t;
         Print();
         Node<Die>* currentNode = dieCLL.getHead();
         do {
-            Die currentDie = currentNode->data;
             if (currentNode != dieCLL.getHead()) {
                 printf(", ");
             }
-            currentDie.roll();
-            Print(currentDie);
+            Die* currentDie = &currentNode->data;
+            currentDie->roll();
             currentNode = currentNode->next;
+            Print(currentDie);
         } while (currentNode != dieCLL.getHead());
+        printf("\n");
     }
+
+    // Print each Die's Side Statistics
+    Node<Die>* currentNode = dieCLL.getHead();
+    do {
+        Die* currentDie = &currentNode->data;
+        currentDie->Print();
+        currentNode = currentNode->next;
+    } while (currentNode != dieCLL.getHead());
 }
 
 void Sequencer::Print() {
     printf("Throw %d: ", currentThrow);
 }
 
-void Sequencer::Print(Die d) {
-    printf("%s rolled a %d", d.getName().c_str(), d.getLastRoll());
+void Sequencer::Print(Die* d) {
+    printf("%s rolled a %d", d->getName().c_str(), d->getLastRoll());
 }

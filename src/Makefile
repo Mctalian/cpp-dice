@@ -90,14 +90,15 @@ gtest_main.a : gtest-all.o gtest_main.o
 # To create the executable file main we need the object files
 # main.o:
 #
-main:  main.o
-	$(CC) $(CFLAGS) -o main main.o
+main:  main.o die.o IHistorical.o INameable.o IRollable.o IWeightable.o DieInterfaces.o sequencer.o configurator.o
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
 # To create the object file main.o, we need the source
 # files main.cpp:
 #
-main.o :  main.cpp die.o IRollable.o IWeightable.o
-	$(CC) $(CFLAGS) -c main.cpp die.o
+main.o :  main.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.cpp
 
 configurator.o : $(USER_DIR)/Configurator/configurator.cpp $(USER_DIR)/Configurator/configurator.hpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Configurator/configurator.cpp

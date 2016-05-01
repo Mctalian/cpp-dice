@@ -18,7 +18,7 @@ public:
     void execute();
 
     void Print();
-    void Print(Die d);
+    void Print(Die* d);
 private:
     int numToThrow;
     int currentThrow;
