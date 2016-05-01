@@ -14,15 +14,18 @@
 
 # Points to the root of Google Test, relative to where this file is.
 # Remember to tweak this if you move this file.
-GTEST_DIR = ./gtest
+GTEST_DIR = /usr/local/include/gtest
 
 # Where to find user code.
 USER_DIR = .
 
+OUT_DIR = ./output
+OBJ_DIR = ./objs
+
 # Flags passed to the preprocessor.
 # Set Google Test's header directory as a system directory, such that
 # the compiler doesn't generate warnings in Google Test headers.
-CPPFLAGS += -isystem $(GTEST_DIR)/include
+CPPFLAGS += -std=c++0x -isystem $(GTEST_DIR)/include
 
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra -pthread
@@ -31,6 +34,7 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 # created to the list.
 TESTS = all_tests \
         die_test \
+        sequencer_test \
         CircularLinkedList_test \
         IHistorical_test \
         INameable_test \
@@ -52,7 +56,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 all : $(TESTS)
 
 clean :
-	rm -f $(TESTS) gtest.a gtest_main.a *.o
+	rm -f $(TESTS) gtest.a gtest_main.a *.o $(OUT_DIR)/*
 
 # Builds gtest.a and gtest_main.a.
 
@@ -101,13 +105,25 @@ die_test.o : $(USER_DIR)/Die/die_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die_test.cpp
 
 die_test : die.o DieInterfaces.o IHistorical.o IRollable.o IWeightable.o INameable.o die_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
+
+sequencer.o : $(USER_DIR)/Sequencer/sequencer.cpp $(USER_DIR)/Sequencer/sequencer.hpp $(IFACE_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Sequencer/sequencer.cpp
+
+sequencer_test.o : $(USER_DIR)/Sequencer/sequencer_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Sequencer/sequencer_test.cpp
+
+sequencer_test : sequencer.o die.o DieInterfaces.o IHistorical.o IRollable.o IWeightable.o INameable.o sequencer_test.o gtest_main.a
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
 CircularLinkedList_test.o : $(USER_DIR)/Structs/CircularLinkedList_test.cpp $(STRUCT_HEADERS) $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Structs/CircularLinkedList_test.cpp
 
 CircularLinkedList_test : CircularLinkedList_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
 IHistorical.o : $(USER_DIR)/Interfaces/IHistorical.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IHistorical.cpp
@@ -116,7 +132,8 @@ IHistorical_test.o : $(USER_DIR)/Interfaces/IHistorical_test.cpp $(IFACE_HEADERS
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IHistorical_test.cpp
 
 IHistorical_test : IHistorical.o IHistorical_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
 INameable.o : $(USER_DIR)/Interfaces/INameable.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/INameable.cpp
@@ -125,7 +142,8 @@ INameable_test.o : $(USER_DIR)/Interfaces/INameable_test.cpp $(IFACE_HEADERS) $(
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/INameable_test.cpp
 
 INameable_test : INameable.o INameable_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
 IRollable.o: $(USER_DIR)/Interfaces/IRollable.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IRollable.cpp
@@ -134,7 +152,8 @@ IRollable_test.o : $(USER_DIR)/Interfaces/IRollable_test.cpp $(IFACE_HEADERS) $(
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IRollable_test.cpp
 
 IRollable_test : IRollable.o IRollable_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
 IWeightable.o: $(USER_DIR)/Interfaces/IWeightable.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IWeightable.cpp
@@ -143,7 +162,8 @@ IWeightable_test.o : $(USER_DIR)/Interfaces/IWeightable_test.cpp $(IFACE_HEADERS
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IWeightable_test.cpp
 
 IWeightable_test : IWeightable.o IWeightable_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
 DieInterfaces.o: $(USER_DIR)/Interfaces/DieInterfaces.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/DieInterfaces.cpp
@@ -152,9 +172,11 @@ DieInterfaces_test.o : $(USER_DIR)/Interfaces/DieInterfaces_test.cpp $(IFACE_HEA
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/DieInterfaces_test.cpp
 
 DieInterfaces_test : DieInterfaces.o IHistorical.o IRollable.o IWeightable.o INameable.o DieInterfaces_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
 all_tests: die.o IHistorical.o INameable.o IRollable.o IWeightable.o DieInterfaces.o \
            die_test.o IHistorical_test.o INameable_test.o IRollable_test.o IWeightable_test.o DieInterfaces_test.o \
            gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@

@@ -16,8 +16,10 @@ public:
     CircularLinkedList<T>();
     void append(const T& n);
     Node<T>* getHead();
+    int getLength();
 private:
     Node<T>* head;
+    int length;
 };
 
 template <class T>
@@ -28,12 +30,14 @@ Node<T>::Node(T d) :
 
 template <class T>
 CircularLinkedList<T>::CircularLinkedList() :
-    head(NULL)
+    head(NULL),
+    length(0)
 {}
 
 template <class T>
 void CircularLinkedList<T>::append(const T& n) {
     Node<T>* newNode = new Node<T>(n);
+    length++;
     if (head == NULL) {
         head = newNode;
         head->next = newNode;
@@ -51,6 +55,11 @@ void CircularLinkedList<T>::append(const T& n) {
 template <class T>
 Node<T>* CircularLinkedList<T>::getHead() {
     return head;
+}
+
+template <class T>
+int CircularLinkedList<T>::getLength() {
+    return length;
 }
 
 #endif

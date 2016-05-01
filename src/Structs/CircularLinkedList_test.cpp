@@ -39,3 +39,19 @@ TYPED_TEST(CircularLinkedListTest, AppendValues) {
     current = current->next;
     EXPECT_EQ(current->data, 3);
 }
+
+// Should track length
+TYPED_TEST(CircularLinkedListTest, GetLength) {
+    CircularLinkedList<TypeParam> cll;
+    cll.append(3);
+
+    ASSERT_EQ(cll.getLength(), 1);
+
+    cll.append(2);
+
+    ASSERT_EQ(cll.getLength(), 2);
+
+    cll.append(1);
+
+    ASSERT_EQ(cll.getLength(), 3);
+}
