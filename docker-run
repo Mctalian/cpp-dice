@@ -1,2 +1,2 @@
 ./docker-clean
-docker run --name cpp-dice -i -t mctalian/cpp-dice /bin/bash
+docker run -v $(pwd)/src:/src --name cpp-dice -i -t mctalian/cpp-dice /bin/bash
