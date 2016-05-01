@@ -2,6 +2,7 @@
 
 IHistorical::IHistorical() :
     trackRolls(),
+    numRolls(0),
     lastRoll(0)
 {
 
@@ -10,8 +11,13 @@ IHistorical::IHistorical() :
 void IHistorical::logRoll(int side) {
     if (side > 0 && side <= 6) {
         trackRolls[side-1]++;
+        numRolls++;
         lastRoll = side;
     }
+}
+
+int IHistorical::getNumRolls() {
+    return numRolls;
 }
 
 int IHistorical::getRollsForSide(int side) {
@@ -25,8 +31,4 @@ int IHistorical::getRollsForSide(int side) {
 
 int IHistorical::getLastRoll() {
     return lastRoll;
-}
-
-void IHistorical::Print() {
-
 }

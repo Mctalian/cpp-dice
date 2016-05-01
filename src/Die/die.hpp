@@ -1,10 +1,9 @@
 #ifndef DIE_HPP
 #define DIE_HPP
 
-#include "../Interfaces/INameable.hpp"
-#include "../Interfaces/WeightableAndRollable.hpp"
+#include "../Interfaces/DieInterfaces.hpp"
 
-class Die : public INameable, public WeightableAndRollable {
+class Die : public DieInterfaces {
 public:
 
     Die();

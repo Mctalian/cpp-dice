@@ -36,7 +36,7 @@ TESTS = all_tests \
         INameable_test \
         IRollable_test \
         IWeightable_test \
-        WeightableAndRollable_test
+        DieInterfaces_test
 
 IFACE_HEADERS = $(USER_DIR)/Interfaces/*.hpp
 
@@ -100,7 +100,7 @@ die.o : $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp $(IFACE_HEADERS)
 die_test.o : $(USER_DIR)/Die/die_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die_test.cpp
 
-die_test : die.o INameable.o IRollable.o IWeightable.o die_test.o gtest_main.a
+die_test : die.o DieInterfaces.o IHistorical.o IRollable.o IWeightable.o INameable.o die_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 CircularLinkedList_test.o : $(USER_DIR)/Structs/CircularLinkedList_test.cpp $(STRUCT_HEADERS) $(GTEST_HEADERS)
@@ -108,7 +108,6 @@ CircularLinkedList_test.o : $(USER_DIR)/Structs/CircularLinkedList_test.cpp $(ST
 
 CircularLinkedList_test : CircularLinkedList_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
-
 
 IHistorical.o : $(USER_DIR)/Interfaces/IHistorical.cpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/IHistorical.cpp
@@ -146,16 +145,16 @@ IWeightable_test.o : $(USER_DIR)/Interfaces/IWeightable_test.cpp $(IFACE_HEADERS
 IWeightable_test : IWeightable.o IWeightable_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
-WeightableAndRollable.o: $(USER_DIR)/Interfaces/WeightableAndRollable.cpp $(IFACE_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/WeightableAndRollable.cpp
+DieInterfaces.o: $(USER_DIR)/Interfaces/DieInterfaces.cpp $(IFACE_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/DieInterfaces.cpp
 
-WeightableAndRollable_test.o : $(USER_DIR)/Interfaces/WeightableAndRollable_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/WeightableAndRollable_test.cpp
+DieInterfaces_test.o : $(USER_DIR)/Interfaces/DieInterfaces_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Interfaces/DieInterfaces_test.cpp
 
-WeightableAndRollable_test : WeightableAndRollable.o WeightableAndRollable_test.o gtest_main.a
+DieInterfaces_test : DieInterfaces.o IHistorical.o IRollable.o IWeightable.o INameable.o DieInterfaces_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
-all_tests: die.o IHistorical.o INameable.o IRollable.o IWeightable.o WeightableAndRollable.o \
-           die_test.o IHistorical_test.o INameable_test.o IRollable_test.o IWeightable_test.o WeightableAndRollable_test.o \
+all_tests: die.o IHistorical.o INameable.o IRollable.o IWeightable.o DieInterfaces.o \
+           die_test.o IHistorical_test.o INameable_test.o IRollable_test.o IWeightable_test.o DieInterfaces_test.o \
            gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
