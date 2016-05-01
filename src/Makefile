@@ -33,6 +33,7 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
 TESTS = all_tests \
+        configurator_test \
         die_test \
         sequencer_test \
         CircularLinkedList_test \
@@ -56,7 +57,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 all : $(TESTS)
 
 clean :
-	rm -f $(TESTS) gtest.a gtest_main.a *.o $(OUT_DIR)/*
+	rm -f $(TESTS) gtest.a gtest_main.a *.o $(OUT_DIR)/* test*.conf
 
 # Builds gtest.a and gtest_main.a.
 
@@ -97,6 +98,16 @@ main:  main.o
 #
 main.o :  main.cpp die.o IRollable.o IWeightable.o
 	$(CC) $(CFLAGS) -c main.cpp die.o
+
+configurator.o : $(USER_DIR)/Configurator/configurator.cpp $(USER_DIR)/Configurator/configurator.hpp $(IFACE_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Configurator/configurator.cpp
+
+configurator_test.o : $(USER_DIR)/Configurator/configurator_test.cpp $(IFACE_HEADERS) $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Configurator/configurator_test.cpp
+
+configurator_test : configurator.o sequencer.o die.o DieInterfaces.o IHistorical.o IRollable.o IWeightable.o INameable.o configurator_test.o gtest_main.a
+	mkdir -p $(OUT_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
 die.o : $(USER_DIR)/Die/die.cpp $(USER_DIR)/Die/die.hpp $(IFACE_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Die/die.cpp
@@ -175,8 +186,8 @@ DieInterfaces_test : DieInterfaces.o IHistorical.o IRollable.o IWeightable.o INa
 	mkdir -p $(OUT_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
 
-all_tests: die.o IHistorical.o INameable.o IRollable.o IWeightable.o DieInterfaces.o \
-           die_test.o IHistorical_test.o INameable_test.o IRollable_test.o IWeightable_test.o DieInterfaces_test.o \
+all_tests: die.o IHistorical.o INameable.o IRollable.o IWeightable.o DieInterfaces.o sequencer.o configurator.o \
+           die_test.o IHistorical_test.o INameable_test.o IRollable_test.o IWeightable_test.o DieInterfaces_test.o sequencer_test.o configurator_test.o \
            gtest_main.a
 	mkdir -p $(OUT_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(OUT_DIR)/$@
